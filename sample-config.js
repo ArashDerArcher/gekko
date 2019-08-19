@@ -34,9 +34,6 @@ config.MACD = {
   }
 }
 
-// settings for other strategies can be found at the bottom, note that only
-// one strategy is active per gekko, the other settings are ignored.
-
 // Note that these settings are only used in backtesting mode, see here:
 config.backtest = {
   daterange: 'scan',
@@ -98,7 +95,7 @@ config.eventLogger = {
   enabled: false,
   // optionally pass a whitelist of events to log, if not past
   // the eventLogger will log _all_ events.
-  // whitelist: ['stratWarmupCompleted', 'advice', 'stratCandle', 'stratUpdate', 'stratNotification', 'tradeInitiated', 'tradeCompleted', 'tradeAborted', 'tradeErrored', 'tradeCancelled', 'performanceReport', 'triggerCreated', 'triggerFired', 'triggerAborted', 'roundtrip']
+  // whitelist: ['advice', 'stratCandle', 'stratUpdate', 'stratNotification', 'tradeInitiated', 'tradeCompleted', 'tradeAborted', 'tradeErrored', 'tradeCancelled', 'performanceReport', 'triggerCreated', 'triggerFired', 'triggerAborted', 'roundtrip', 'portfolioChange', 'roundtripInitiated']
 }
 
 config.pushover = {
@@ -119,8 +116,8 @@ config.blotter = {
 
 // want Gekko to send a mail on buy or sell advice?
 config.mailer = {
-  enabled: false, // Send Emails if true, false to turn off
-  sendMailOnStart: true, // Send 'Gekko starting' message if true, not if false
+  enabled: false,
+  sendMailOnStart: true,
 
   email: '', // Your Gmail address
   muteSoft: true, // disable advice printout if it's soft
@@ -154,11 +151,8 @@ config.mailer = {
 }
 
 config.pushbullet = {
-  // sends pushbullets if true
   enabled: true,
-  // Send 'Gekko starting' message if true
   sendMessageOnStart: true,
-  // Send Message for advice? Recommend Flase for paper, true for live
   sendOnAdvice: true,
   // Send Message on Trade Completion?
   sendOnTrade: true,
@@ -197,7 +191,6 @@ config.telegrambot = {
 }
 
 config.twitter = {
-  // sends pushbullets if true
   enabled: false,
   // Send 'Gekko starting' message if true
   sendMessageOnStart: false,
@@ -337,163 +330,6 @@ config.candleUploader = {
   enabled: false,
   url: '',
   apiKey: ''
-}
-
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//                      OTHER STRATEGY SETTINGS
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-// Exponential Moving Averages settings:
-config.DEMA = {
-  // EMA weight (α)
-  // the higher the weight, the more smooth (and delayed) the line
-  weight: 21,
-  // amount of candles to remember and base initial EMAs on
-  // the difference between the EMAs (to act as triggers)
-  thresholds: {
-    down: -0.025,
-    up: 0.025
-  }
-};
-
-// PPO settings:
-config.PPO = {
-  // EMA weight (α)
-  // the higher the weight, the more smooth (and delayed) the line
-  short: 12,
-  long: 26,
-  signal: 9,
-  // the difference between the EMAs (to act as triggers)
-  thresholds: {
-    down: -0.025,
-    up: 0.025,
-    // How many candle intervals should a trend persist
-    // before we consider it real?
-    persistence: 2
-  }
-}
-
-// Uses one of the momentum indicators but adjusts the thresholds when PPO is bullish or bearish
-// Uses settings from the ppo and momentum indicator config block
-config.varPPO = {
-  momentum: 'TSI', // RSI, TSI or UO
-  thresholds: {
-    // new threshold is default threshold + PPOhist * PPOweight
-    weightLow: 120,
-    weightHigh: -120,
-    // How many candle intervals should a trend persist
-    // before we consider it real?
-    persistence: 0
-  }
-}
-
-// RSI settings:
-config.RSI = {
-  interval: 14,
-  thresholds: {
-    low: 30,
-    high: 70,
-    // How many candle intervals should a trend persist
-    // before we consider it real?
-    persistence: 1
-  }
-}
-
-// TSI settings:
-config.TSI = {
-  short: 13,
-  long: 25,
-  thresholds: {
-    low: -25,
-    high: 25,
-    // How many candle intervals should a trend persist
-    // before we consider it real?
-    persistence: 1
-  }
-}
-
-// Ultimate Oscillator Settings
-config.UO = {
-  first: {
-    weight: 4,
-    period: 7
-  },
-  second: {
-    weight: 2,
-    period: 14
-  },
-  third: {
-    weight: 1,
-    period: 28
-  },
-  thresholds: {
-    low: 30,
-    high: 70,
-    // How many candle intervals should a trend persist
-    // before we consider it real?
-    persistence: 1
-  }
-}
-
-// CCI Settings
-config.CCI = {
-  constant: 0.015, // constant multiplier. 0.015 gets to around 70% fit
-  history: 90, // history size, make same or smaller than history
-  thresholds: {
-    up: 100, // fixed values for overbuy upward trajectory
-    down: -100, // fixed value for downward trajectory
-    persistence: 0 // filter spikes by adding extra filters candles
-  }
-}
-
-// StochRSI settings
-config.StochRSI = {
-  interval: 3,
-  thresholds: {
-    low: 20,
-    high: 80,
-    // How many candle intervals should a trend persist
-    // before we consider it real?
-    persistence: 3
-  }
-}
-
-
-// custom settings:
-config.custom = {
-  my_custom_setting: 10,
-}
-
-config['talib-macd'] = {
-  parameters: {
-    optInFastPeriod: 10,
-    optInSlowPeriod: 21,
-    optInSignalPeriod: 9
-  },
-  thresholds: {
-    down: -0.025,
-    up: 0.025,
-  }
-}
-
-config['talib-macd'] = {
-  parameters: {
-    optInFastPeriod: 10,
-    optInSlowPeriod: 21,
-    optInSignalPeriod: 9
-  },
-  thresholds: {
-    down: -0.025,
-    up: 0.025,
-  }
-}
-
-config['tulip-adx'] = {
-  optInTimePeriod: 10,
-  thresholds: {
-    down: -0.025,
-    up: 0.025,
-  }
 }
 
 module.exports = config;
