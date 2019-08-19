@@ -2,28 +2,13 @@
 // @link https://gekko.wizb.it/docs/commandline/plugins.html
 
 var config = {};
-
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//                          GENERAL SETTINGS
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-config.debug = true; // for additional logging / debugging
-
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//                         WATCHING A MARKET
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+config.debug = true; 
 
 config.watch = {
-
-  // see https://gekko.wizb.it/docs/introduction/supported_exchanges.html
   exchange: 'binance',
   currency: 'USDT',
   asset: 'BTC',
 }
-
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//                       CONFIGURING TRADING ADVICE
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 config.tradingAdvisor = {
   enabled: true,
@@ -47,10 +32,28 @@ config.MACD = {
     // before we consider it real?
     persistence: 1
   }
-};
+}
 
 // settings for other strategies can be found at the bottom, note that only
 // one strategy is active per gekko, the other settings are ignored.
+
+// Note that these settings are only used in backtesting mode, see here:
+config.backtest = {
+  daterange: 'scan',
+  // daterange: {
+  //   from: "2017-09-01",
+  //   to: "2019-09-01"
+  //},
+  batchSize: 50
+}
+
+config.importer = {
+  daterange: {
+    // NOTE: these dates are in UTC
+    from: "2017-09-01 00:00:00",
+    to: "2019-09-01 00:00:00"
+  }
+}
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //                       CONFIGURING PLUGINS
@@ -64,15 +67,15 @@ config.paperTrader = {
   // start balance, on what the current balance is compared with
   simulationBalance: {
     // these are in the unit types configured in the watcher.
-    asset: 1,
+    asset: 0,
     currency: 100,
   },
   // how much fee in % does each trade cost?
-  feeMaker: 0.15,
-  feeTaker: 0.25,
+  feeMaker: 0.1,
+  feeTaker: 0.1,
   feeUsing: 'maker',
   // how much slippage/spread should Gekko assume per trade?
-  slippage: 0.05,
+  slippage: 0.2,
 }
 
 config.performanceAnalyzer = {
@@ -95,7 +98,7 @@ config.eventLogger = {
   enabled: false,
   // optionally pass a whitelist of events to log, if not past
   // the eventLogger will log _all_ events.
-  // whitelist: ['portfolioChange', 'portfolioValueChange']
+  // whitelist: ['stratWarmupCompleted', 'advice', 'stratCandle', 'stratUpdate', 'stratNotification', 'tradeInitiated', 'tradeCompleted', 'tradeAborted', 'tradeErrored', 'tradeCancelled', 'performanceReport', 'triggerCreated', 'triggerFired', 'triggerAborted', 'roundtrip']
 }
 
 config.pushover = {
@@ -108,7 +111,7 @@ config.pushover = {
 }
 
 config.blotter = {
-  enabled: false,
+  enabled:true,
   filename: 'blotter.csv',
   dateFormat: 'l LT',
   timezone: -300, // -300 minutes for EST(-5:00), only used if exchange doesn't provide correct timezone
@@ -152,7 +155,7 @@ config.mailer = {
 
 config.pushbullet = {
   // sends pushbullets if true
-  enabled: false,
+  enabled: true,
   // Send 'Gekko starting' message if true
   sendMessageOnStart: true,
   // Send Message for advice? Recommend Flase for paper, true for live
@@ -191,7 +194,7 @@ config.telegrambot = {
   // Receive notifications for trades and warnings/errors related to trading
   emitTrades: false,
   token: 'YOUR_TELEGRAM_BOT_TOKEN',
-};
+}
 
 config.twitter = {
   // sends pushbullets if true
@@ -209,7 +212,7 @@ config.twitter = {
   access_token_key: '',
   // twitter access token secret
   access_token_secret: ''
-};
+}
 
 config.xmppbot = {
   enabled: false,
@@ -337,35 +340,6 @@ config.candleUploader = {
 }
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//                       CONFIGURING BACKTESTING
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-// Note that these settings are only used in backtesting mode, see here:
-// @link: https://gekko.wizb.it/docs/commandline/backtesting.html
-
-config.backtest = {
-  daterange: 'scan',
-  // daterange: {
-  //   from: "2018-03-01",
-  //   to: "2018-04-28"
-  //},
-  batchSize: 50
-}
-
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//                       CONFIGURING IMPORTING
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-config.importer = {
-  daterange: {
-    // NOTE: these dates are in UTC
-    from: "2017-11-01 00:00:00",
-    to: "2017-11-20 00:00:00"
-  }
-}
-
-
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //                      OTHER STRATEGY SETTINGS
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -397,7 +371,7 @@ config.PPO = {
     // before we consider it real?
     persistence: 2
   }
-};
+}
 
 // Uses one of the momentum indicators but adjusts the thresholds when PPO is bullish or bearish
 // Uses settings from the ppo and momentum indicator config block
@@ -411,7 +385,7 @@ config.varPPO = {
     // before we consider it real?
     persistence: 0
   }
-};
+}
 
 // RSI settings:
 config.RSI = {
@@ -423,7 +397,7 @@ config.RSI = {
     // before we consider it real?
     persistence: 1
   }
-};
+}
 
 // TSI settings:
 config.TSI = {
@@ -436,7 +410,7 @@ config.TSI = {
     // before we consider it real?
     persistence: 1
   }
-};
+}
 
 // Ultimate Oscillator Settings
 config.UO = {
@@ -459,7 +433,7 @@ config.UO = {
     // before we consider it real?
     persistence: 1
   }
-};
+}
 
 // CCI Settings
 config.CCI = {
@@ -470,7 +444,7 @@ config.CCI = {
     down: -100, // fixed value for downward trajectory
     persistence: 0 // filter spikes by adding extra filters candles
   }
-};
+}
 
 // StochRSI settings
 config.StochRSI = {
@@ -482,7 +456,7 @@ config.StochRSI = {
     // before we consider it real?
     persistence: 3
   }
-};
+}
 
 
 // custom settings:
@@ -521,19 +495,5 @@ config['tulip-adx'] = {
     up: 0.025,
   }
 }
-
-
-// set this to true if you understand that Gekko will
-// invest according to how you configured the indicators.
-// None of the advice in the output is Gekko telling you
-// to take a certain position. Instead it is the result
-// of running the indicators you configured automatically.
-//
-// In other words: Gekko automates your trading strategies,
-// it doesn't advice on itself, only set to true if you truly
-// understand this.
-//
-// Not sure? Read this first: https://github.com/askmike/gekko/issues/201
-config['I understand that Gekko only automates MY OWN trading strategies'] = false;
 
 module.exports = config;
