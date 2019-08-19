@@ -180,7 +180,6 @@ Trader.prototype.getPortfolio = function(callback) {
 
     const findAsset = item => item.asset === this.asset;
     const assetAmount = parseFloat(_.find(data.balances, findAsset).free);
-
     const findCurrency = item => item.asset === this.currency;
     const currencyAmount = parseFloat(_.find(data.balances, findCurrency).free);
 
@@ -209,9 +208,8 @@ Trader.prototype.getFee = function(callback) {
   // binance does NOT tell us whether the user is using BNB to pay
   // for fees, which means a discount (effectively lower fees)
   const handle = (err, data) => {
-    if(err)  {
-      return callback(err);
-    }
+    if(err) return callback(err);
+    
     const basepoints = data.makerCommission;
 
     /** Binance raw response
@@ -236,8 +234,7 @@ Trader.prototype.getFee = function(callback) {
 
 Trader.prototype.getTicker = function(callback) {
   const setTicker = (err, data) => {
-    if (err)
-      return callback(err);
+    if (err) return callback(err);
 
     var result = _.find(data, ticker => ticker.symbol === this.pair);
 
@@ -333,11 +330,8 @@ Trader.prototype.addOrder = function(tradeType, amount, price, callback) {
 };
 
 Trader.prototype.getOpenOrders = function(callback) {
-
   const get = (err, data) => {
-    if(err) {
-      return callback(err);
-    }
+    if(err) return callback(err);
 
     callback(null, data.map(o => o.orderId));
   }
@@ -441,11 +435,8 @@ Trader.prototype.sell = function(amount, price, callback) {
 };
 
 Trader.prototype.checkOrder = function(order, callback) {
-
   const check = (err, data) => {
-    if (err) {
-      return callback(err);
-    }
+    if (err) return callback(err);
 
     if(data.filled === true) {
       // binance responsed with order not found
@@ -485,14 +476,10 @@ Trader.prototype.checkOrder = function(order, callback) {
 };
 
 Trader.prototype.cancelOrder = function(order, callback) {
-
   const cancel = (err, data) => {
-
     this.oldOrder = order;
 
-    if(err) {
-      return callback(err);
-    }
+    if(err) return callback(err);
 
     if(data && data.filled) {
       return callback(undefined, true);
